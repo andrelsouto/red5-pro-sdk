@@ -45,85 +45,54 @@
       console.error('Could not publish: ' + err);
     });
 
-  captureButton.addEventListener('click', swapCamera)
+  captureButton.addEventListener('click', swapCamera);
 
   function swapCamera() {
-    var connection = targetPublisher.getPeerConnection();
-    navigator.mediaDevices.getDisplayMedia()
-      .then(function (stream) {
+    if (captureButton.textContent === 'Compartilhar') {
 
-        var senders = connection.getSenders();
-        var tracks = stream.getTracks();
-        var i = senders.length;
-        var j = tracks.length;
-        while (--i > -1) {
-          if (senders[i].track.kind === 'video') {
-            break;
-          }
-        }
-        if (i < 0) {
-          console.error('Could not replace track : No video stream in connection');
-          return;
-        }
-        var replacePromise;
-        while (--j > -1) {
-          if (tracks[j].kind === 'video') {
-            senders[i].track.stop();
-            replacePromise = senders[i].replaceTrack(tracks[j]);
-            break;
-          }
-        }
-        document.getElementById('vid').srcObject = stream;
-        captureButton = captureButton === 'Compartilhar' ? 'Parar de compartilhar' : 'Compartilhar';
-        return replacePromise;
-      })
-      .catch(function (error) {
-        console.error('Could not replace track : ' + error.message);
-      });
+      navigator.mediaDevices.getDisplayMedia()
+        .then((stream) => swap(stream))
+        .catch(function (error) {
+          console.error('Could not replace track : ' + error.message);
+        });
+    }
+
+    if (captureButton.textContent === 'Parar de compartilhar') {
+      navigator.mediaDevices.getUserMedia({ audio: true, video: true })
+        .then((stream) => swap(stream))
+        .catch(function (error) {
+          console.error('Could not replace track : ' + error.message);
+        });
+    }
   }
 
-  // function capture(cb) {
-  //   // Edge has getDisplayMedia on navigator and not media devices?
-  //   var p = undefined
-  //   if (navigator.getDisplayMedia) {
-  //     p = navigator.getDisplayMedia(config)
-  //   } else {
-  //     p = navigator.mediaDevices.getDisplayMedia(config)
-  //   }
-  //   p.then(cb).catch(function (error) {
-  //     captureButton.disabled = false;
-  //     console.error(error);
-  //     updateStatusFromEvent({
-  //       type: 'ERROR',
-  //       data: error.message
-  //     });
-  //   });
-  // }
+  function swap(stream) {
 
-  // captureButton.addEventListener('click', function () {
-  //   capture(setupPublisher);
-  // });
-
-  // function setupPublisher(mediaStream) {
-  //   new red5prosdk.RTCPublisher()
-  //     .initWithStream(config, mediaStream)
-  //     .then(function (publisherImpl) {
-  //       // streamTitle.innerText = new;
-  //       targetPublisher = publisherImpl;
-  //       subscribe();
-  //       targetPublisher.on('*', onPublisherEvent);
-  //       return targetPublisher.publish();
-  //     })
-  //     .then(function () {
-  //       onPublishSuccess(targetPublisher);
-  //       setupAudio();
-  //     });
-  // }
-
-  // function onPublisherEvent(event) {
-  //   console.log('[Red5ProPublisher] ' + event.type + '.');
-  //   subscribe();
-  //   // updateStatusFromEvent(event);
-  // }
+    var connection = targetPublisher.getPeerConnection();
+    var senders = connection.getSenders();
+    var tracks = stream.getTracks();
+    var i = senders.length;
+    var j = tracks.length;
+    while (--i > -1) {
+      if (senders[i].track.kind === 'video') {
+        break;
+      }
+    }
+    if (i < 0) {
+      console.error('Could not replace track : No video stream in connection');
+      return;
+    }
+    var replacePromise;
+    while (--j > -1) {
+      if (tracks[j].kind === 'video') {
+        senders[i].track.stop();
+        replacePromise = senders[i].replaceTrack(tracks[j]);
+        break;
+      }
+    }
+    document.getElementById('vid').srcObject = stream;
+    captureButton.textContent = captureButton.textContent === 'Compartilhar' ? 'Parar de compartilhar' : 'Compartilhar';
+    return replacePromise;
+  }
 
 }(window.red5prosdk));
