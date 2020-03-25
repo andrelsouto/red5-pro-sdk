@@ -18,6 +18,9 @@
       bundlePolicy: 'max-bundle'
     }
   };
+  var title = document.querySelector('h1');
+  title.textContent = config.streamName;
+
 
   function subscribe() {
     rtcSubscriber.init(config)
@@ -48,20 +51,20 @@
   captureButton.addEventListener('click', swapCamera);
 
   function swapCamera() {
-    if (captureButton.textContent === 'Compartilhar') {
+    if (captureButton.textContent === 'Compartilhar tela') {
 
       navigator.mediaDevices.getDisplayMedia()
         .then((stream) => swap(stream))
         .catch(function (error) {
-          console.error('Could not replace track : ' + error.message);
+          console.error('Não foi possível realizar a mudança de camera: ' + error.message);
         });
     }
 
-    if (captureButton.textContent === 'Parar de compartilhar') {
+    if (captureButton.textContent === 'Voltar para câmera') {
       navigator.mediaDevices.getUserMedia({ audio: true, video: true })
         .then((stream) => swap(stream))
         .catch(function (error) {
-          console.error('Could not replace track : ' + error.message);
+          console.error('Não foi possível realizar a mudança de camera: ' + error.message);
         });
     }
   }
@@ -79,7 +82,7 @@
       }
     }
     if (i < 0) {
-      console.error('Could not replace track : No video stream in connection');
+      console.error('Não foi possível realizar a mudança de camera: No video stream in connection');
       return;
     }
     var replacePromise;
@@ -91,7 +94,7 @@
       }
     }
     document.getElementById('vid').srcObject = stream;
-    captureButton.textContent = captureButton.textContent === 'Compartilhar' ? 'Parar de compartilhar' : 'Compartilhar';
+    captureButton.textContent = captureButton.textContent === 'Compartilhar tela' ? 'Voltar para câmera' : 'Compartilhar tela';
     return replacePromise;
   }
 
