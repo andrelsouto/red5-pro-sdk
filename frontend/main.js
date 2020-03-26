@@ -6,9 +6,9 @@
   var rtcSubscriber = new red5prosdk.RTCSubscriber();
   var targetPublisher;
   var config = {
-    protocol: 'wss',
-    host: 'red5.vsoft.com.br',
-    port: 443,
+    protocol: 'ws',
+    host: 'localhost',
+    port: 5080,
     app: 'live',
     mediaElementId: 'vid',
     streamName: `stream - ${new Date().getMilliseconds()}`,
@@ -53,7 +53,7 @@
   function swapCamera() {
     if (captureButton.textContent === 'Compartilhar tela') {
 
-      navigator.mediaDevices.getDisplayMedia()
+      navigator.mediaDevices.getDisplayMedia({ audio: true, video: true })  
         .then((stream) => swap(stream))
         .catch(function (error) {
           console.error('Não foi possível realizar a mudança de camera: ' + error.message);

@@ -1,25 +1,25 @@
 <!doctype html>
 <html>
-  <head>
-    <meta charset="utf-8">
-    <!-- *Recommended WebRTC Shim -->
-    <script src="https://webrtchacks.github.io/adapter/adapter-latest.js"></script>
-  </head>
-  <body>
-    <!-- video containers -->
-    <!-- publisher -->
-    <div>
-      <h1></h1>
-      <video id="vid" width="640" height="480" muted autoplay></video>
-    </div>
-    <button id="captureButton">Compartilhar tela</button>
-    <!-- subscriber -->
-    <!-- <div>
-      <video id="red5pro-subscriber" width="640" height="480" controls autoplay></video>
-    </div> -->
-    <!-- Red5 Pro SDK -->
-    <script src="lib/red5pro/red5pro-sdk.min.js"></script>
-    <!-- Create Pub/Sub -->
-    <script src="main.js"></script>
-  </body>
+
+<head>
+  <meta charset="utf-8">
+  <!-- *Recommended WebRTC Shim -->
+  <script src="https://webrtchacks.github.io/adapter/adapter-latest.js"></script>
+  <link href="http://localhost:8081/lib/red5pro/red5pro-media.css" rel="stylesheet">
+</head>
+
+<body>
+  <!-- video containers -->
+  <!-- publisher -->
+  <div class="red5pro-media-container">
+    <h1></h1>
+    <video id="vid" class="red5pro-media red5pro-media-background" controls muted autoplay></video>
+  </div>
+  <button id="captureButton">Compartilhar tela</button>
+  <script src="https://github.com/sindresorhus/screenfull.js/blob/master/dist/screenfull.min.js"></script>
+  <script src="http://localhost:8081/lib/red5pro/red5pro-sdk.min.js"></script>
+  <!-- Create Pub/Sub -->
+  <script src="main.js"></script>
+</body>
+
 </html>
